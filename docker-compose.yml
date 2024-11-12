@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bwalo  # Use 'postgres' instead of 'localhost'
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: #********
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"  # Expose the app's port to the host
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: bwalo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mjima
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
